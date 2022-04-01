@@ -1,6 +1,5 @@
 package xyz.msws;
 
-import java.io.File;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -9,6 +8,7 @@ import java.util.Timer;
 import java.util.TimerTask;
 import java.util.concurrent.TimeUnit;
 
+import com.amazonaws.auth.EnvironmentVariableCredentialsProvider;
 import com.amazonaws.regions.Regions;
 import com.amazonaws.services.s3.AmazonS3;
 import com.amazonaws.services.s3.AmazonS3ClientBuilder;
@@ -22,7 +22,6 @@ import xyz.msws.formatter.Formatter;
 import xyz.msws.formatter.ForumsFormat;
 import xyz.msws.parser.GTParser;
 import xyz.msws.server.AWSServerData;
-import xyz.msws.server.FileServerData;
 import xyz.msws.server.ServerConfig;
 import xyz.msws.server.ServerData;
 import xyz.msws.server.StatConfig;
@@ -36,15 +35,21 @@ public class JavaStats extends TimerTask {
     private final Timer timer = new Timer();
     private String data = null;
     private long lastRun = 0;
-    private AmazonS3 client = AmazonS3ClientBuilder.standard().withRegion(Regions.DEFAULT_REGION).build();
+    private AmazonS3 client;
 
     public static void main(String[] args) {
         new JavaStats();
-
-        SpringApplication.run(JavaStats.class, args);
+        SpringApplication.run(JavaStats.class, new String[0]);
     }
 
     public JavaStats() {
+        try {
+            client = AmazonS3ClientBuilder.standard().withCredentials(new EnvironmentVariableCredentialsProvider())
+                    .withRegion(Regions.DEFAULT_REGION).build();
+        } catch (Exception e) {
+            throw e;
+        }
+
         configs.add(new ServerConfig("jb.csgo.edgegamers.cc:27015", "Jailbreak"));
         configs.add(new ServerConfig("ttt.csgo.edgegamers.cc:27015", "Trouble in Terrorist Town"));
         configs.add(new ServerConfig("ttt.csgo.edgegamers.cc:27015", "Surf"));
