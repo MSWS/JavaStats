@@ -35,8 +35,9 @@ public abstract class ServerData {
     }
 
     public void addData(DataSnapshot data) {
-        if (System.currentTimeMillis() - getDataAt(System.currentTimeMillis()).get().getDate() < TimeUnit.HOURS
-                .toMillis(12))
+        if (getDataAt(System.currentTimeMillis()).isPresent()
+                && System.currentTimeMillis() - getDataAt(System.currentTimeMillis()).get().getDate() < TimeUnit.HOURS
+                        .toMillis(12))
             return;
         snapshots.put(data.getDate(), data);
     }

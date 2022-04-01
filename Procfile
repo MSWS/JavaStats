@@ -1,0 +1,1 @@
+web: java -jar javastats/target/javastats-1.0-SNAPSHOT.jar
