@@ -36,3 +36,4 @@ javastats/target/**
 AWP Only.txt
 javastats/dependency-reduced-pom.xml
 javastats/target/
+javastats/target/maven-status/maven-compiler-plugin/compile/default-compile/inputFiles.lst

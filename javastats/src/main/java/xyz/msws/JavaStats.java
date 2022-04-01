@@ -15,7 +15,9 @@ import com.amazonaws.services.s3.AmazonS3ClientBuilder;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import xyz.msws.formatter.Formatter;
@@ -28,6 +30,7 @@ import xyz.msws.server.StatConfig;
 
 @SpringBootApplication
 @RestController
+@Controller
 public class JavaStats extends TimerTask {
     private Map<String, ServerData> servers = new HashMap<>();
     private List<ServerConfig> configs = new ArrayList<>();
@@ -72,6 +75,7 @@ public class JavaStats extends TimerTask {
     }
 
     @RequestMapping("/")
+    @ResponseBody
     public String getGreeting() {
         run();
         return data;
