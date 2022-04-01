@@ -1,11 +1,22 @@
 package xyz.msws.parser;
 
+import java.io.IOException;
+
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 
 import xyz.msws.server.DataSnapshot;
+import xyz.msws.server.ServerConfig;
+import xyz.msws.server.StatConfig;
 
 public class GTParser implements ServerParser<String> {
+
+    private String baseUrl;
+
+    public GTParser(StatConfig config) {
+        // baseUrl = "https://www.gametracker.com/server_info/";
+        this.baseUrl = config.getTrackerURL();
+    }
 
     @Override
     public DataSnapshot parseData(String data) {
@@ -32,6 +43,16 @@ public class GTParser implements ServerParser<String> {
         snapshot.setRank(rank);
         snapshot.setPercentile(percentile);
         return snapshot;
+    }
+
+    public DataSnapshot parseData(ServerConfig config) {
+        try {
+            Document doc = Jsoup.connect("https://www.gametracker.com/server_info/jb.csgo.edgegamers.cc:27015/").get();
+            return parseData(doc.toString());
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return null;
     }
 
 }
