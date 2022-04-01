@@ -1,8 +1,6 @@
 package xyz.msws;
 
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 import java.util.Timer;
 import java.util.TimerTask;
@@ -33,41 +31,35 @@ import xyz.msws.server.StatConfig;
 @Controller
 public class JavaStats extends TimerTask {
     private Map<String, ServerData> servers = new HashMap<>();
-    private List<ServerConfig> configs = new ArrayList<>();
     private GTParser parser;
     private final Timer timer = new Timer();
     private String data = null;
     private long lastRun = 0;
     private AmazonS3 client;
+    private StatConfig statConfig;
 
     public static void main(String[] args) {
         SpringApplication.run(JavaStats.class, args);
     }
 
     public JavaStats() {
-        try {
-            client = AmazonS3ClientBuilder.standard()
-                    .withCredentials(new DefaultAWSCredentialsProviderChain())
-                    .withRegion(Regions.US_WEST_1).build();
-        } catch (Exception e) {
-            throw e;
-        }
+        client = AmazonS3ClientBuilder.standard().withCredentials(new DefaultAWSCredentialsProviderChain())
+                .withRegion(Regions.US_WEST_1).build();
 
-        configs.add(new ServerConfig("jb.csgo.edgegamers.cc:27015", "Jailbreak"));
-        configs.add(new ServerConfig("ttt.csgo.edgegamers.cc:27015", "Trouble in Terrorist Town"));
-        configs.add(new ServerConfig("surf.csgo.edgegamers.cc:27015", "Surf"));
-        configs.add(new ServerConfig("surf-static.csgo.edgegamers.cc:27015", "Surf Summer"));
-        configs.add(new ServerConfig("mg.csgo.edgegamers.cc:27015", "Minigames"));
-        configs.add(new ServerConfig("bhop.csgo.edgegamers.cc:27015", "Bhop"));
-        configs.add(new ServerConfig("104.128.58.205:27015", "AWP Only"));
-        configs.add(new ServerConfig("104.128.58.204:27015", "KZ Climb"));
+        statConfig = new StatConfig("https://www.gametracker.com/server_info/");
 
-        configs.sort((a, b) -> a.getName().compareTo(b.getName()));
+        statConfig.add("jb.csgo.edgegamers.cc:27015", "Jailbreak");
+        statConfig.add("ttt.csgo.edgegamers.cc:27015", "Trouble in Terrorist Town");
+        statConfig.add("surf.csgo.edgegamers.cc:27015", "Surf");
+        statConfig.add("surf-static.csgo.edgegamers.cc:27015", "Surf Summer");
+        statConfig.add("mg.csgo.edgegamers.cc:27015", "Minigames");
+        statConfig.add("bhop.csgo.edgegamers.cc:27015", "Bhop");
+        statConfig.add("104.128.58.205:27015", "AWP Only");
+        statConfig.add("104.128.58.204:27015", "KZ Climb");
+        statConfig.add("d2.css.edgegamers.cc:27015", "Dust2");
 
-        for (ServerConfig config : configs)
+        for (ServerConfig config : statConfig.getServers())
             servers.put(config.getName(), new AWSServerData(client, config));
-
-        StatConfig statConfig = new StatConfig("https://www.gametracker.com/server_info/");
 
         parser = new GTParser(statConfig);
         timer.schedule(this, 0, TimeUnit.HOURS.toMillis(12));
@@ -85,11 +77,12 @@ public class JavaStats extends TimerTask {
         if (System.currentTimeMillis() - lastRun < TimeUnit.HOURS.toMillis(1))
             return;
         lastRun = System.currentTimeMillis();
-        for (ServerConfig config : configs) {
-            ServerData data = servers.get(config.getName());
-            data.addData(parser.parseData(config));
+
+        for (ServerData data : servers.values()) {
+            data.addData(parser.parseData(data.getConfig()));
             data.save();
         }
+
         Formatter format = new ForumsFormat();
         System.out.println(format.format(servers.values()));
         data = format.format(servers.values()).replace(System.lineSeparator(), "<br>");

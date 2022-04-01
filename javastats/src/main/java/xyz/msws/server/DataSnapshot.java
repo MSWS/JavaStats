@@ -42,20 +42,20 @@ public class DataSnapshot {
     public DataSnapshot(String data) {
         JsonObject element = JsonParser.parseString(data).getAsJsonObject();
         this.rank = element.get("rank").getAsInt();
-        this.monthlyRank = element.get("monthlyRank").getAsInt();
-        this.percentile = element.get("percentile").getAsInt();
-        this.monthlyPercentile = element.get("monthlyPercentile").getAsInt();
-        this.name = element.get("name").getAsString();
+        // this.monthlyRank = element.get("monthlyRank").getAsInt();
+        // this.percentile = element.get("percentile").getAsInt();
+        // this.monthlyPercentile = element.get("monthlyPercentile").getAsInt();
+        // this.name = element.get("name").getAsString();
         this.date = element.get("date").getAsLong();
     }
 
     public JsonObject toJSON() {
         JsonObject obj = new JsonObject();
         obj.addProperty("rank", rank);
-        obj.addProperty("monthlyRank", monthlyRank);
-        obj.addProperty("percentile", percentile);
-        obj.addProperty("monthlyPercentile", monthlyPercentile);
-        obj.addProperty("name", name);
+        // obj.addProperty("monthlyRank", monthlyRank);
+        // obj.addProperty("percentile", percentile);
+        // obj.addProperty("monthlyPercentile", monthlyPercentile);
+        // obj.addProperty("name", name);
         obj.addProperty("date", date);
         return obj;
     }

@@ -11,6 +11,10 @@ import xyz.msws.server.DataSnapshot;
 import xyz.msws.server.ServerConfig;
 import xyz.msws.server.StatConfig;
 
+/**
+ * GameTracker implementation of {@link ServerParser}.
+ * Scrapes raw HTML of respective server's page.
+ */
 public class GTParser implements ServerParser<String> {
 
     private String baseUrl;
@@ -66,7 +70,7 @@ public class GTParser implements ServerParser<String> {
 
     public DataSnapshot parseData(ServerConfig config) {
         try {
-            Document doc = Jsoup.connect("https://www.gametracker.com/server_info/" + config.getIp()).get();
+            Document doc = Jsoup.connect(baseUrl + config.getIp()).get();
             try {
                 return parseData(doc.toString());
             } catch (IndexOutOfBoundsException e) {

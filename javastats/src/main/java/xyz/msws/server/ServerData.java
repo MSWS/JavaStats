@@ -1,6 +1,5 @@
 package xyz.msws.server;
 
-import java.util.Arrays;
 import java.util.Map;
 import java.util.Optional;
 import java.util.TreeMap;
@@ -28,9 +27,9 @@ public abstract class ServerData implements Comparable<ServerData> {
     public Optional<DataSnapshot> getDataAt(long time) {
         DataSnapshot lastSnap = null;
         for (Map.Entry<Long, DataSnapshot> entry : snapshots.entrySet()) {
-            if (entry.getKey() > time) {
-                return Optional.of(lastSnap);
-            }
+            if (entry.getKey() > time)
+                return Optional.ofNullable(lastSnap == null ? snapshots.values().stream().findAny().orElse(null)
+                        : lastSnap);
             lastSnap = entry.getValue();
         }
         return Optional.ofNullable(lastSnap);

@@ -11,6 +11,10 @@ import java.util.StringJoiner;
 import xyz.msws.server.DataSnapshot;
 import xyz.msws.server.ServerData;
 
+/**
+ * Forum implementation of a {@link Formatter}
+ * Intended with BBCode and Forum-style formatting
+ */
 public class ForumsFormat implements Formatter {
 
     private static SimpleDateFormat sdf = new SimpleDateFormat("MM/dd/yyyy");
@@ -20,12 +24,12 @@ public class ForumsFormat implements Formatter {
         List<ServerData> sorted = new ArrayList<>(servers);
         StringJoiner builder = new StringJoiner(System.lineSeparator());
         builder.add(sdf.format(System.currentTimeMillis()));
-        builder.add("[B]Counter-Strike: Global Offensive[/B]");
+
         builder.add("[LIST]");
-        Collections.sort(sorted);
-        for (ServerData data : sorted) {
+        Collections.sort(sorted); // Sort by ranking "low" to "high"
+        for (ServerData data : sorted)
             builder.add(format(data));
-        }
+
         builder.add("[/LIST]");
         return builder.toString();
     }
@@ -36,8 +40,8 @@ public class ForumsFormat implements Formatter {
         cal.setTimeInMillis(System.currentTimeMillis());
         DataSnapshot dataNow = data.getDataAt(cal.getTimeInMillis()).get();
 
+        // This should be already in a [LIST] according to the parent format method
         builder.add(String.format("[*][B]%s[/B]", data.getConfig().getName()));
-
         builder.add("[LIST]");
 
         cal.add(Calendar.DATE, -1);
@@ -60,8 +64,7 @@ public class ForumsFormat implements Formatter {
         if (ytd)
             return "[COLOR=" + getColor(old, nRank) + "][B](" + (nRank > old ? "-" : "") + Math.abs(nRank - old)
                     + ")[/B][/COLOR]";
-        return "#" + nRank + " [B][COLOR=" + getColor(old, nRank) + "]" + generate(nRank, old, true)
-                + "[/COLOR][/B]";
+        return "#" + nRank + " " + generate(nRank, old, true);
     }
 
     private String getColor(int old, int nRank) {
