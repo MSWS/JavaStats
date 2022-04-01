@@ -8,5 +8,9 @@ import xyz.msws.server.ServerData;
  * Responsible for formatting server data
  */
 public interface Formatter {
-    String format(Collection<ServerData> data);
+    default String format(Collection<ServerData> data) {
+        return format(data, System.currentTimeMillis());
+    }
+
+    String format(Collection<ServerData> data, long time);
 }

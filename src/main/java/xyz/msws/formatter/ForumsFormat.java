@@ -20,24 +20,24 @@ public class ForumsFormat implements Formatter {
     private static SimpleDateFormat sdf = new SimpleDateFormat("MM/dd/yyyy");
 
     @Override
-    public String format(Collection<ServerData> servers) {
+    public String format(Collection<ServerData> servers, long time) {
         List<ServerData> sorted = new ArrayList<>(servers);
         StringJoiner builder = new StringJoiner(System.lineSeparator());
-        builder.add(sdf.format(System.currentTimeMillis()));
+        builder.add(sdf.format(time));
 
         builder.add("[LIST]");
         Collections.sort(sorted); // Sort by ranking "low" to "high"
         for (ServerData data : sorted)
-            builder.add(format(data));
+            builder.add(format(data, time));
 
         builder.add("[/LIST]");
         return builder.toString();
     }
 
-    private String format(ServerData data) {
+    private String format(ServerData data, long time) {
         StringJoiner builder = new StringJoiner(System.lineSeparator());
         Calendar cal = Calendar.getInstance();
-        cal.setTimeInMillis(System.currentTimeMillis());
+        cal.setTimeInMillis(time);
         DataSnapshot dataNow = data.getDataAt(cal.getTimeInMillis()).get();
 
         // This should be already in a [LIST] according to the parent format method

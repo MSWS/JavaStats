@@ -13,8 +13,8 @@ import com.amazonaws.services.s3.AmazonS3ClientBuilder;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -28,7 +28,6 @@ import xyz.msws.server.StatConfig;
 
 @SpringBootApplication
 @RestController
-@Controller
 public class JavaStats extends TimerTask {
     private Map<String, ServerData> servers = new HashMap<>();
     private GTParser parser;
@@ -37,6 +36,7 @@ public class JavaStats extends TimerTask {
     private long lastRun = 0;
     private AmazonS3 client;
     private StatConfig statConfig;
+    private Map<Long, String> cache = new HashMap<>();
 
     public static void main(String[] args) {
         SpringApplication.run(JavaStats.class, args);
@@ -65,26 +65,60 @@ public class JavaStats extends TimerTask {
         timer.schedule(this, 0, TimeUnit.HOURS.toMillis(12));
     }
 
-    @RequestMapping("/")
+    @GetMapping("/")
     @ResponseBody
-    public String getGreeting() {
-        run();
+    public String getHome() {
+        if (data != null && System.currentTimeMillis() - lastRun < TimeUnit.HOURS.toMillis(1))
+            return data;
+        lastRun = System.currentTimeMillis();
+        data = run(System.currentTimeMillis());
         return data;
+    }
+
+    @GetMapping("/{time}")
+    @ResponseBody
+    public String getHomeAtTime(@PathVariable(name = "time") String timeStr) {
+        long stamp = System.currentTimeMillis();
+        try {
+            stamp = Long.parseLong(timeStr);
+        } catch (NumberFormatException e) {
+            return getHome();
+        }
+        if (stamp < 0) {
+            stamp *= TimeUnit.DAYS.toMillis(1);
+            stamp = System.currentTimeMillis() + stamp;
+        } else if (stamp < 999999999L)
+            return getHome();
+        if (stamp < 9999999999L)
+            stamp *= 1000;
+
+        return getCachedTimed(stamp);
+    }
+
+    String getCachedTimed(long time) {
+        long round = TimeUnit.DAYS.toMillis(1);
+        time = Math.round(Math.floor(time / (double) round)) * round;
+        if (cache.containsKey(time))
+            return cache.get(time);
+        String result = run(time);
+        cache.put(time, result);
+        return result;
     }
 
     @Override
     public void run() {
-        if (System.currentTimeMillis() - lastRun < TimeUnit.HOURS.toMillis(1))
-            return;
-        lastRun = System.currentTimeMillis();
+        run(System.currentTimeMillis());
+    }
 
+    public String run(long time) {
+        System.out.println("Fetching new data... of " + time);
         for (ServerData data : servers.values()) {
             data.addData(parser.parseData(data.getConfig()));
             data.save();
         }
 
         Formatter format = new ForumsFormat();
-        System.out.println(format.format(servers.values()));
-        data = format.format(servers.values()).replace(System.lineSeparator(), "<br>");
+        System.out.println(format.format(servers.values(), time));
+        return format.format(servers.values(), time).replace(System.lineSeparator(), "<br>");
     }
 }

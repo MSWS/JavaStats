@@ -32,3 +32,5 @@ replay_pid*
 
 target/**
 dependency-reduced-pom.xml
+**.txt
+settings.json
