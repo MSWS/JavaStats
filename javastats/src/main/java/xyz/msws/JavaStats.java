@@ -56,8 +56,8 @@ public class JavaStats extends TimerTask {
 
         configs.add(new ServerConfig("jb.csgo.edgegamers.cc:27015", "Jailbreak"));
         configs.add(new ServerConfig("ttt.csgo.edgegamers.cc:27015", "Trouble in Terrorist Town"));
-        configs.add(new ServerConfig("ttt.csgo.edgegamers.cc:27015", "Surf"));
-        configs.add(new ServerConfig("surf.csgo.edgegamers.cc:27015", "Surf Summer"));
+        configs.add(new ServerConfig("surf.csgo.edgegamers.cc:27015", "Surf"));
+        configs.add(new ServerConfig("surf-static.csgo.edgegamers.cc:27015", "Surf Summer"));
         configs.add(new ServerConfig("mg.csgo.edgegamers.cc:27015", "Minigames"));
         configs.add(new ServerConfig("bhop.csgo.edgegamers.cc:27015", "Bhop"));
         configs.add(new ServerConfig("104.128.58.205:27015", "AWP Only"));
