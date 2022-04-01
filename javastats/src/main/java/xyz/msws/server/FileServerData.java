@@ -23,16 +23,20 @@ public class FileServerData extends ServerData {
                 sb.append(line);
                 sb.append(System.lineSeparator());
             }
-            System.out.println(sb.toString());
             data = sb.toString();
         } catch (Exception e) {
             e.printStackTrace();
         }
 
         if (!data.isEmpty())
-            for (String line : data.split(System.lineSeparator()))
-                snapshots.put(Long.parseLong(line.split(":")[0]),
-                        new DataSnapshot(line.substring(line.indexOf(":") + 1)));
+            for (String line : data.split(System.lineSeparator())) {
+                long time = Long.parseLong(line.split(":")[0]);
+                DataSnapshot snap = new DataSnapshot(line.substring(line.indexOf(":") + 1));
+                snapshots.put(time, snap);
+                if (snap.getDate() > System.currentTimeMillis())
+                    System.out.println("WARNING: " + config.getName() + "'s snapshot in the future! (" + snap.getDate()
+                            + ">" + System.currentTimeMillis() + ")");
+            }
     }
 
     @Override

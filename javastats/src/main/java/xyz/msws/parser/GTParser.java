@@ -43,7 +43,6 @@ public class GTParser implements ServerParser<String> {
         if (percEnd == -1)
             percEnd = content.indexOf("st Percentile)", percStart);
         int percentile = Integer.parseInt(content.substring(percStart, percEnd));
-        System.out.println("Rank: " + rank + " Percentile: " + percentile);
 
         snapshot.setName(name);
         snapshot.setRank(rank);

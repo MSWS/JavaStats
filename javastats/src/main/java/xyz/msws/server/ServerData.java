@@ -28,8 +28,9 @@ public abstract class ServerData implements Comparable<ServerData> {
     public Optional<DataSnapshot> getDataAt(long time) {
         DataSnapshot lastSnap = null;
         for (Map.Entry<Long, DataSnapshot> entry : snapshots.entrySet()) {
-            if (entry.getKey() > time)
+            if (entry.getKey() > time) {
                 return Optional.of(lastSnap);
+            }
             lastSnap = entry.getValue();
         }
         return Optional.ofNullable(lastSnap);

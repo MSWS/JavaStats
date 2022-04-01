@@ -56,11 +56,11 @@ public class ForumsFormat implements Formatter {
         return builder.toString();
     }
 
-    private String generate(int old, int nRank, boolean ytd) {
+    private String generate(int nRank, int old, boolean ytd) {
         if (ytd)
             return "[COLOR=" + getColor(old, nRank) + "][B](" + (nRank > old ? "-" : "") + Math.abs(nRank - old)
                     + ")[/B][/COLOR]";
-        return "#" + nRank + " [B][COLOR=" + getColor(old, nRank) + "]" + generate(old, nRank, true)
+        return "#" + nRank + " [B][COLOR=" + getColor(old, nRank) + "]" + generate(nRank, old, true)
                 + "[/COLOR][/B]";
     }
 

@@ -45,7 +45,6 @@ public class AWSServerData extends ServerData {
                 sb.append(line);
                 sb.append(System.lineSeparator());
             }
-            System.out.println(sb.toString());
             data = sb.toString();
         } catch (Exception e) {
             e.printStackTrace();
