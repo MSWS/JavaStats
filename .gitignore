@@ -30,10 +30,5 @@ replay_pid*
 
 # End of https://www.toptal.com/developers/gitignore/api/java
 
-*.lst
-javastats/target/**
-AWP Only.txt
-javastats/dependency-reduced-pom.xml
-javastats/target/
-javastats/target/maven-status/maven-compiler-plugin/compile/default-compile/inputFiles.lst
-**.txt
+target/**
+dependency-reduced-pom.xml
