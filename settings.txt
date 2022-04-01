@@ -1,0 +1,118 @@
+This is where the output file from CS:GO is located
+directory=C:\Program Files (x86)\Steam\steamapps\common\Counter-Strike Global Offensive\csgo\
+
+This is your steam API Key, open the link if you do not know where to get it
+steamkey=https://steamcommunity.com/dev/apikey
+
+This is the game's application ID. CS:GO's is 730, CS:S' is 240
+appId=730
+
+This is GameME's server ID, set to override auto-assignment (http://prestigegaming.gameme.com/)
+Leave blank for auto-detection
+csgo for Minigames
+csgo2 for TTT
+csgo3 for Jailbreak
+csgo5 for Surf
+csgo6 for BHop
+tf for TF2
+webId=
+
+If true, the application will check and output account ages
+doPlaytime=true
+
+If true, the application will check Jailbreak Logs
+doJailbreak=true
+
+If true, the application will check TTT Logs
+doTTT=true
+
+If you wish to limit the largest unit used to display playtime, you can specify it here
+eg. if set to HOURS then "48 hours" would be displayed instead of "2 days"
+playtimeUnit=YEARS
+
+If true, we will cache the results during runtime, reducing API calls (RECOMMENDED TRUE)
+cache=true
+
+If true, we will request players' playtime
+requestGametimes = true
+If true, we will cache game playtime during runtime, reducing API calls (RECOMMENDED TRUE)
+cacheGametimes=true
+
+If true, we will save accurate ages over multiple executions, reducing API calls (RECOMMENDED TRUE)
+persist=true
+
+If you want to save logs to another file, specify the path here
+clonePath=
+
+Rate determines how often the output file is scanned, lower = less latency, but may consume more resources
+Numbers are in milliseconds, 1000 ms = 1 second
+rate=10000
+
+The header is printed after each status output in console, useful for distinguishing outputs
+header=\n\n\n\n\n\n\n============================================
+
+Some profiles have their visibility set to private, this application guesstimates based off other accounts that were made immediately before/after
+If false, we will try to fetch, if true, we will save the estimated guess
+persistGuessses=true
+
+Source sometimes fails to print the #end of a status command. If this happens,
+we will assume the status has ended after X milliseconds (-1 to disable)
+statusTimeout=5000
+
+Some people may break a rule and quickly disconnect. This checks if the same
+steam account joins with a name that is different from the one they had previously
+warnNameChages=true
+
+Jailbreak Specific Settings
+
+Log specific summarized actions
+Values: DAMAGE, KILL, BUTTON, WARDEN, VENTS, DROP_WEAPON, NADE, WARDEN_DEATH, PASS, FIRE, RESKIN, GHOST_RESPAWN, BAD_DAMAGE, BAD_KILL, BODYID, DNA, SHOP, TSECRET, TAZE
+Damage: Whenever a player damages another player
+Kill: Whenever a player kills another player
+Button: Whenever a player pushes a button
+Warden: Whenever a player takes warden
+Vents: Whenever a player breaks vents
+Drop_Weapon: Whenever a player drops a weapon
+Nade: Whenever a player throws a nade
+Warden_Death: Whenever the warden dies
+Pass: Whenever the warden passes
+Fire: Whenever the warden is fired
+Reskin: Whenever a player reskins a weapon
+Ghost_Respawn: Whenever a ghost respawns
+Bad_Damage: Whenever a player deals bad damage (inno on inno, traitor on traitor, etc.)
+Bad_Kill: Whenever a player deals bad damage (inno on inno, traitor on traitor, etc.)
+Bodyid: Whenever a player identifies a body
+DNA: Whenever a detective DNA scans a body
+TSecret: Whenever a traitor activates a T secret
+Taze: Whenever a player tazes another player
+showTypes=KILL,WARDEN,WARDEN_DEATH,FIRE,PASS,RESKIN,BAD_KILL
+
+Cooldown for when a CT drops a gun and a T uses the same type of gun (seconds)
+gundropTimeout=10
+
+Cooldown for when a player pushes a button and a player takes damage from the world (seconds)
+buttonTimeout=5
+
+Cooldown for when a player throws a nade and a player takes damage from the world (seconds)
+nadeTimeout=10
+
+Time that prisoners have when a new warden is selected (seconds)
+wardenTimeout=5
+
+Max time round can go without a warden until it is a freeday (when warden passes/fired) (seconds)
+freeTime=10
+
+Show if a CT breaks vents before any prisoner does
+showEarlyVents=true
+
+Show if a CT kills/damages a prisoner when there is no warden, or within 3 seconds of a new warden
+showEarlyKills=true
+
+Show if a player pushes a button and other players take damage from the world within buttonTimeout
+showGameButtons=true
+
+Show if a player throws a nade and other players take damage from the world within nadeTimeout
+showNades=true
+
+Show if a CT drops a gun and a prisoner uses the same gun within gundropTimeout
+showGunPlants=true
