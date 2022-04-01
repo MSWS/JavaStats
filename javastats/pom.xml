@@ -86,26 +86,39 @@
           <version>3.0.0</version>
         </plugin>
         <plugin>
-          <artifactId>maven-assembly-plugin</artifactId>
-          <version>3.0.0</version>
-          <executions>
-            <execution>
-              <phase>package</phase>
-              <goals>
-                <goal>single</goal>
-              </goals>
-            </execution>
-          </executions>
+          <groupId>org.apache.maven.plugins</groupId>
+          <artifactId>maven-jar-plugin</artifactId>
           <configuration>
             <archive>
               <manifest>
-                <mainClass>fully.qualified.MainClass</mainClass>
+                <addClasspath>true</addClasspath>
+                <mainClass>xyz.msws.JavaStats</mainClass>
+              </manifest>
+            </archive>
+          </configuration>
+        </plugin>
+        <plugin>
+          <artifactId>maven-assembly-plugin</artifactId>
+          <configuration>
+            <archive>
+              <manifest>
+                <addClasspath>true</addClasspath>
+                <mainClass>xyz.msws.JavaStats</mainClass>
               </manifest>
             </archive>
             <descriptorRefs>
               <descriptorRef>jar-with-dependencies</descriptorRef>
             </descriptorRefs>
           </configuration>
+          <executions>
+            <execution>
+              <id>make-my-jar-with-dependencies</id>
+              <phase>package</phase>
+              <goals>
+                <goal>single</goal>
+              </goals>
+            </execution>
+          </executions>
         </plugin>
       </plugins>
     </pluginManagement>
