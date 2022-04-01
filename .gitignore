@@ -32,5 +32,7 @@ replay_pid*
 
 *.txt
 *.lst
-javastats/target/*
+javastats/target/**
 AWP Only.txt
+javastats/dependency-reduced-pom.xml
+javastats/target/
