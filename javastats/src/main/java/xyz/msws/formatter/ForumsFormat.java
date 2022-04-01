@@ -14,7 +14,7 @@ public class ForumsFormat implements Formatter {
 
     @Override
     public String format(Collection<ServerData> servers) {
-        StringJoiner builder = new StringJoiner("\n");
+        StringJoiner builder = new StringJoiner(System.lineSeparator());
         builder.add(sdf.format(System.currentTimeMillis()));
         builder.add("[B]Counter-Strike: Global Offensive[/B]");
         builder.add("[LIST]");

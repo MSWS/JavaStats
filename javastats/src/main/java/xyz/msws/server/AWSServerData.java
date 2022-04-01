@@ -10,6 +10,7 @@ import java.util.Map;
 
 import com.amazonaws.AmazonServiceException;
 import com.amazonaws.services.s3.AmazonS3;
+import com.amazonaws.services.s3.model.AmazonS3Exception;
 import com.amazonaws.services.s3.model.S3Object;
 import com.amazonaws.services.s3.model.S3ObjectInputStream;
 
@@ -22,17 +23,15 @@ public class AWSServerData extends ServerData {
         this.client = client;
         file = new File(config.getName() + ".txt");
 
-        S3Object obj = client.getObject("egostats", file.getName());
-        S3ObjectInputStream input = obj.getObjectContent();
         try (FileOutputStream out = new FileOutputStream(file)) {
-
+            S3Object obj = client.getObject("egostats", file.getName());
+            S3ObjectInputStream input = obj.getObjectContent();
             byte[] read_buf = new byte[1024];
             int read_len = 0;
-            while ((read_len = input.read(read_buf)) > 0) {
+            while ((read_len = input.read(read_buf)) > 0)
                 out.write(read_buf, 0, read_len);
-            }
             input.close();
-        } catch (IOException e) {
+        } catch (IOException | AmazonS3Exception e) {
             e.printStackTrace();
         }
 

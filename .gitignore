@@ -33,3 +33,4 @@ replay_pid*
 *.txt
 *.lst
 javastats/target/*
+AWP Only.txt

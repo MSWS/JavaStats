@@ -8,7 +8,7 @@ import java.util.Timer;
 import java.util.TimerTask;
 import java.util.concurrent.TimeUnit;
 
-import com.amazonaws.auth.EnvironmentVariableCredentialsProvider;
+import com.amazonaws.auth.DefaultAWSCredentialsProviderChain;
 import com.amazonaws.regions.Regions;
 import com.amazonaws.services.s3.AmazonS3;
 import com.amazonaws.services.s3.AmazonS3ClientBuilder;
@@ -39,13 +39,14 @@ public class JavaStats extends TimerTask {
 
     public static void main(String[] args) {
         new JavaStats();
-        SpringApplication.run(JavaStats.class, new String[0]);
+        SpringApplication.run(JavaStats.class, args);
     }
 
     public JavaStats() {
         try {
-            client = AmazonS3ClientBuilder.standard().withCredentials(new EnvironmentVariableCredentialsProvider())
-                    .withRegion(Regions.DEFAULT_REGION).build();
+            client = AmazonS3ClientBuilder.standard()
+                    .withCredentials(new DefaultAWSCredentialsProviderChain())
+                    .withRegion(Regions.US_WEST_1).build();
         } catch (Exception e) {
             throw e;
         }
