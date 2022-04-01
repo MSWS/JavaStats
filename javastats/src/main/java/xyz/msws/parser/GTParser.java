@@ -1,6 +1,8 @@
 package xyz.msws.parser;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
@@ -14,13 +16,11 @@ public class GTParser implements ServerParser<String> {
     private String baseUrl;
 
     public GTParser(StatConfig config) {
-        // baseUrl = "https://www.gametracker.com/server_info/";
         this.baseUrl = config.getTrackerURL();
     }
 
     @Override
     public DataSnapshot parseData(String data) {
-        System.out.printf("Parsing %s\n", data);
         Document doc = Jsoup.parse(data);
         DataSnapshot snapshot = new DataSnapshot();
 
@@ -31,10 +31,12 @@ public class GTParser implements ServerParser<String> {
         String name = content.substring(nameStart, nameEnd);
 
         int rankStart = content.indexOf("Game Server Rank: ") + "Game Server Rank: ".length();
-        int rankEnd = content.indexOf("th", rankStart);
+        // int rankEnd = content.indexOf("th", rankStart);
+        int rankEnd = getIndex(content, rankStart);
         int rank = Integer.parseInt(content.substring(rankStart, rankEnd));
 
-        int percStart = content.indexOf("th", rankEnd) + 4;
+        // int percStart = content.indexOf("th", rankEnd) + 4;
+        int percStart = getIndex(content, rankEnd, 4);
         int percEnd = content.indexOf("th Percentile)", percStart);
         int percentile = Integer.parseInt(content.substring(percStart, percEnd));
         System.out.println("Rank: " + rank + " Percentile: " + percentile);
@@ -45,12 +47,28 @@ public class GTParser implements ServerParser<String> {
         return snapshot;
     }
 
+    private int getIndex(String content, int start, int offset) {
+        List<Integer> inds = new ArrayList<>();
+        inds.add(content.indexOf("th", start));
+        inds.add(content.indexOf("nd", start));
+        inds.add(content.indexOf("st", start));
+        inds.removeIf(i -> i == -1);
+        inds.sort(Integer::compareTo);
+        return inds.get(0) + offset;
+    }
+
+    private int getIndex(String content, int start) {
+        return getIndex(content, start, 0);
+    }
+
     public DataSnapshot parseData(ServerConfig config) {
         try {
-            Document doc = Jsoup.connect("https://www.gametracker.com/server_info/jb.csgo.edgegamers.cc:27015/").get();
+            Document doc = Jsoup.connect("https://www.gametracker.com/server_info/" + config.getIp()).get();
             return parseData(doc.toString());
         } catch (IOException e) {
             e.printStackTrace();
+            System.out.println(
+                    "Failed to fetch data from \"https://www.gametracker.com/server_info/" + config.getIp() + "\"");
         }
         return null;
     }

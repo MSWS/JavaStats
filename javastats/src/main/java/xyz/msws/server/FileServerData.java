@@ -16,23 +16,23 @@ public class FileServerData extends ServerData {
         if (!file.exists())
             return;
         String data = null;
-        try {
-            BufferedReader br = new BufferedReader(new FileReader(file));
+        try (BufferedReader br = new BufferedReader(new FileReader(file))) {
             StringBuilder sb = new StringBuilder();
             String line;
             while ((line = br.readLine()) != null) {
                 sb.append(line);
                 sb.append(System.lineSeparator());
-                line = br.readLine();
             }
+            System.out.println(sb.toString());
             data = sb.toString();
-            br.close();
         } catch (Exception e) {
             e.printStackTrace();
         }
 
-        for (String line : data.split("\n"))
-            snapshots.put(Long.parseLong(line.split(":")[0]), new DataSnapshot(line.substring(line.indexOf(":") + 1)));
+        if (!data.isEmpty())
+            for (String line : data.split(System.lineSeparator()))
+                snapshots.put(Long.parseLong(line.split(":")[0]),
+                        new DataSnapshot(line.substring(line.indexOf(":") + 1)));
     }
 
     @Override
@@ -40,7 +40,7 @@ public class FileServerData extends ServerData {
         try (FileWriter writer = new FileWriter(file)) {
             for (Map.Entry<Long, DataSnapshot> entry : snapshots.entrySet()) {
                 writer.write(entry.getKey() + ":" + entry.getValue().toJSON().toString());
-                writer.write("\n");
+                writer.write(System.lineSeparator());
             }
         } catch (IOException e) {
             e.printStackTrace();

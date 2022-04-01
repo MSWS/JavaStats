@@ -1,16 +1,19 @@
 package xyz.msws.server;
 
-import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
+import java.util.TreeMap;
+import java.util.concurrent.TimeUnit;
+
+import lombok.Getter;
 
 public abstract class ServerData {
-    protected Map<Long, DataSnapshot> snapshots = new HashMap<>();
+    protected Map<Long, DataSnapshot> snapshots = new TreeMap<>();
+    @Getter
     protected final ServerConfig config;
 
     public ServerData(ServerConfig config) {
         this.config = config;
-        snapshots = new HashMap<>();
     }
 
     /**
@@ -32,6 +35,9 @@ public abstract class ServerData {
     }
 
     public void addData(DataSnapshot data) {
+        if (System.currentTimeMillis() - getDataAt(System.currentTimeMillis()).get().getDate() < TimeUnit.HOURS
+                .toMillis(12))
+            return;
         snapshots.put(data.getDate(), data);
     }
 
