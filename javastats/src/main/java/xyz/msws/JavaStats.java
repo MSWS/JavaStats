@@ -41,7 +41,6 @@ public class JavaStats extends TimerTask {
     private AmazonS3 client;
 
     public static void main(String[] args) {
-        new JavaStats();
         SpringApplication.run(JavaStats.class, args);
     }
 

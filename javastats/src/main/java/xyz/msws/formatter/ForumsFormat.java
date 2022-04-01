@@ -1,8 +1,11 @@
 package xyz.msws.formatter;
 
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collection;
+import java.util.Collections;
+import java.util.List;
 import java.util.StringJoiner;
 
 import xyz.msws.server.DataSnapshot;
@@ -14,11 +17,13 @@ public class ForumsFormat implements Formatter {
 
     @Override
     public String format(Collection<ServerData> servers) {
+        List<ServerData> sorted = new ArrayList<>(servers);
         StringJoiner builder = new StringJoiner(System.lineSeparator());
         builder.add(sdf.format(System.currentTimeMillis()));
         builder.add("[B]Counter-Strike: Global Offensive[/B]");
         builder.add("[LIST]");
-        for (ServerData data : servers) {
+        Collections.sort(sorted);
+        for (ServerData data : sorted) {
             builder.add(format(data));
         }
         builder.add("[/LIST]");
@@ -53,14 +58,14 @@ public class ForumsFormat implements Formatter {
 
     private String generate(int old, int nRank, boolean ytd) {
         if (ytd)
-            return "[COLOR=" + getColor(old, nRank) + "][B](" + (nRank > old ? "-" : "") + (nRank - old)
+            return "[COLOR=" + getColor(old, nRank) + "][B](" + (nRank > old ? "-" : "") + Math.abs(nRank - old)
                     + ")[/B][/COLOR]";
         return "#" + nRank + " [B][COLOR=" + getColor(old, nRank) + "]" + generate(old, nRank, true)
                 + "[/COLOR][/B]";
     }
 
     private String getColor(int old, int nRank) {
-        return old == nRank ? "white" : old > nRank ? "green" : "red";
+        return old == nRank ? "white" : nRank > old ? "red" : "green";
     }
 
 }

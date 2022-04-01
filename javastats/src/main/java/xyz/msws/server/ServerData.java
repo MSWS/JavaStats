@@ -8,7 +8,7 @@ import java.util.concurrent.TimeUnit;
 
 import lombok.Getter;
 
-public abstract class ServerData {
+public abstract class ServerData implements Comparable<ServerData> {
     protected Map<Long, DataSnapshot> snapshots = new TreeMap<>();
     @Getter
     protected final ServerConfig config;
@@ -41,6 +41,15 @@ public abstract class ServerData {
                         .toMillis(12))
             return;
         snapshots.put(data.getDate(), data);
+    }
+
+    @Override
+    public int compareTo(ServerData o) {
+        if (o.getDataAt(System.currentTimeMillis()) == null && this.getDataAt(System.currentTimeMillis()) == null)
+            return 0;
+        int a = o.getDataAt(System.currentTimeMillis()).get().getRank();
+        int b = this.getDataAt(System.currentTimeMillis()).get().getRank();
+        return Integer.compare(b, a);
     }
 
     public abstract void save();
