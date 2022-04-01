@@ -39,6 +39,7 @@ public class JavaStats {
     }
 
     public static void main(String[] args) {
+        System.out.println("MAIN WORKING");
         SpringApplication.run(JavaStats.class, args);
     }
 }
