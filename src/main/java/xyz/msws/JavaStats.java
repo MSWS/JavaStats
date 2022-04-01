@@ -33,7 +33,7 @@ public class JavaStats extends TimerTask {
     private GTParser parser;
     private final Timer timer = new Timer();
     private String data = null;
-    private long lastRun = 0;
+    private long lastRun = 0, lastFetch = 0;
     private AmazonS3 client;
     private StatConfig statConfig;
     private Map<Long, String> cache = new HashMap<>();
@@ -83,6 +83,12 @@ public class JavaStats extends TimerTask {
         return data;
     }
 
+    @GetMapping(value = { "/lastFetch", "/lf" })
+    public String getLastFetch() {
+        return String.format("%d | %d (%d)", System.currentTimeMillis(), lastFetch,
+                System.currentTimeMillis() - lastFetch);
+    }
+
     @GetMapping("/{time}")
     public String getHomeAtTime(@PathVariable(name = "time") String timeStr) {
         long stamp = System.currentTimeMillis();
@@ -117,14 +123,19 @@ public class JavaStats extends TimerTask {
         data = run(System.currentTimeMillis());
     }
 
-    public String run(long time) {
-        for (ServerData data : servers.values()) {
-            data.addData(parser.parseData(data.getConfig()));
-            data.save();
+    public void fetch() {
+        for (ServerData dat : servers.values()) {
+            dat.addData(parser.parseData(dat.getConfig()));
+            dat.save();
         }
+        lastFetch = System.currentTimeMillis();
+    }
 
+    public String run(long time) {
+        if (System.currentTimeMillis() - lastFetch > TimeUnit.HOURS.toMillis(1))
+            fetch();
         Formatter format = new ForumsFormat();
-        String str = format.format(servers.values());
+        String str = format.format(servers.values(), time);
         System.out.println(str);
         str = str.replace(System.lineSeparator(), "<br>");
         str = String.format("<head>" + metaContent + "</head><body><p>%s</p></body>", str);
