@@ -26,7 +26,7 @@ public class ForumsFormat implements Formatter {
     }
 
     private String format(ServerData data) {
-        StringJoiner builder = new StringJoiner("\n");
+        StringJoiner builder = new StringJoiner(System.lineSeparator());
         Calendar cal = Calendar.getInstance();
         cal.setTimeInMillis(System.currentTimeMillis());
         DataSnapshot dataNow = data.getDataAt(cal.getTimeInMillis()).get();

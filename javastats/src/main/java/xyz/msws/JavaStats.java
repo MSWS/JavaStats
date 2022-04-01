@@ -9,30 +9,42 @@ import java.util.Timer;
 import java.util.TimerTask;
 import java.util.concurrent.TimeUnit;
 
+import com.amazonaws.regions.Regions;
+import com.amazonaws.services.s3.AmazonS3;
+import com.amazonaws.services.s3.AmazonS3ClientBuilder;
+
+import org.springframework.boot.SpringApplication;
+import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+
 import xyz.msws.formatter.Formatter;
 import xyz.msws.formatter.ForumsFormat;
 import xyz.msws.parser.GTParser;
+import xyz.msws.server.AWSServerData;
 import xyz.msws.server.FileServerData;
 import xyz.msws.server.ServerConfig;
 import xyz.msws.server.ServerData;
 import xyz.msws.server.StatConfig;
 
+@SpringBootApplication
+@RestController
 public class JavaStats extends TimerTask {
     private Map<String, ServerData> servers = new HashMap<>();
     private List<ServerConfig> configs = new ArrayList<>();
     private GTParser parser;
     private final Timer timer = new Timer();
+    private String data = null;
+    private long lastRun = 0;
+    private AmazonS3 client = AmazonS3ClientBuilder.standard().withRegion(Regions.DEFAULT_REGION).build();
 
     public static void main(String[] args) {
         new JavaStats();
+
+        SpringApplication.run(JavaStats.class, args);
     }
 
     public JavaStats() {
-        timer.schedule(this, 0, TimeUnit.HOURS.toMillis(12));
-    }
-
-    @Override
-    public void run() {
         configs.add(new ServerConfig("jb.csgo.edgegamers.cc:27015", "Jailbreak"));
         configs.add(new ServerConfig("ttt.csgo.edgegamers.cc:27015", "Trouble in Terrorist Town"));
         configs.add(new ServerConfig("ttt.csgo.edgegamers.cc:27015", "Surf"));
@@ -44,14 +56,26 @@ public class JavaStats extends TimerTask {
 
         configs.sort((a, b) -> a.getName().compareTo(b.getName()));
 
-        for (ServerConfig config : configs) {
-            servers.put(config.getName(), new FileServerData(new File(config.getName() + ".txt"), config));
-        }
+        for (ServerConfig config : configs)
+            servers.put(config.getName(), new AWSServerData(client, config));
 
         StatConfig statConfig = new StatConfig("https://www.gametracker.com/server_info/");
 
         parser = new GTParser(statConfig);
+        timer.schedule(this, 0, TimeUnit.HOURS.toMillis(12));
+    }
 
+    @RequestMapping("/")
+    public String getGreeting() {
+        run();
+        return data;
+    }
+
+    @Override
+    public void run() {
+        if (System.currentTimeMillis() - lastRun < TimeUnit.HOURS.toMillis(1))
+            return;
+        lastRun = System.currentTimeMillis();
         for (ServerConfig config : configs) {
             ServerData data = servers.get(config.getName());
             data.addData(parser.parseData(config));
@@ -59,5 +83,6 @@ public class JavaStats extends TimerTask {
         }
         Formatter format = new ForumsFormat();
         System.out.println(format.format(servers.values()));
+        data = format.format(servers.values()).replace(System.lineSeparator(), "<br>");
     }
 }
