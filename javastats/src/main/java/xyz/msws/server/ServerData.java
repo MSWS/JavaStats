@@ -1,5 +1,6 @@
 package xyz.msws.server;
 
+import java.util.Arrays;
 import java.util.Map;
 import java.util.Optional;
 import java.util.TreeMap;
@@ -27,8 +28,8 @@ public abstract class ServerData {
     public Optional<DataSnapshot> getDataAt(long time) {
         DataSnapshot lastSnap = null;
         for (Map.Entry<Long, DataSnapshot> entry : snapshots.entrySet()) {
-            if (entry.getKey() <= time)
-                return Optional.of(entry.getValue());
+            if (entry.getKey() > time)
+                return Optional.of(lastSnap);
             lastSnap = entry.getValue();
         }
         return Optional.ofNullable(lastSnap);
