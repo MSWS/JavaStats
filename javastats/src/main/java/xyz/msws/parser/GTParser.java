@@ -38,6 +38,10 @@ public class GTParser implements ServerParser<String> {
         // int percStart = content.indexOf("th", rankEnd) + 4;
         int percStart = getIndex(content, rankEnd, 4);
         int percEnd = content.indexOf("th Percentile)", percStart);
+        if (percEnd == -1)
+            percEnd = content.indexOf("nd Percentile)", percStart);
+        if (percEnd == -1)
+            percEnd = content.indexOf("st Percentile)", percStart);
         int percentile = Integer.parseInt(content.substring(percStart, percEnd));
         System.out.println("Rank: " + rank + " Percentile: " + percentile);
 
@@ -64,7 +68,12 @@ public class GTParser implements ServerParser<String> {
     public DataSnapshot parseData(ServerConfig config) {
         try {
             Document doc = Jsoup.connect("https://www.gametracker.com/server_info/" + config.getIp()).get();
-            return parseData(doc.toString());
+            try {
+                return parseData(doc.toString());
+            } catch (IndexOutOfBoundsException e) {
+                System.out.println("Failed to parse " + doc.toString());
+                throw e;
+            }
         } catch (IOException e) {
             e.printStackTrace();
             System.out.println(

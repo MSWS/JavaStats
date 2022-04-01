@@ -2,10 +2,12 @@ package xyz.msws;
 
 import java.io.File;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Timer;
+import java.util.TimerTask;
+import java.util.concurrent.TimeUnit;
 
 import xyz.msws.formatter.Formatter;
 import xyz.msws.formatter.ForumsFormat;
@@ -15,16 +17,22 @@ import xyz.msws.server.ServerConfig;
 import xyz.msws.server.ServerData;
 import xyz.msws.server.StatConfig;
 
-public class JavaStats {
+public class JavaStats extends TimerTask {
     private Map<String, ServerData> servers = new HashMap<>();
     private List<ServerConfig> configs = new ArrayList<>();
     private GTParser parser;
+    private final Timer timer = new Timer();
 
     public static void main(String[] args) {
         new JavaStats();
     }
 
     public JavaStats() {
+        timer.schedule(this, 0, TimeUnit.HOURS.toMillis(12));
+    }
+
+    @Override
+    public void run() {
         configs.add(new ServerConfig("jb.csgo.edgegamers.cc:27015", "Jailbreak"));
         configs.add(new ServerConfig("ttt.csgo.edgegamers.cc:27015", "Trouble in Terrorist Town"));
         configs.add(new ServerConfig("ttt.csgo.edgegamers.cc:27015", "Surf"));
