@@ -46,10 +46,8 @@ public class AWSServerData extends ServerData {
         try (BufferedReader br = new BufferedReader(new FileReader(file))) {
             StringBuilder sb = new StringBuilder();
             String line;
-            while ((line = br.readLine()) != null) {
-                sb.append(line);
-                sb.append(System.lineSeparator());
-            }
+            while ((line = br.readLine()) != null)
+                sb.append(line).append(System.lineSeparator());
             data = sb.toString();
         } catch (Exception e) {
             e.printStackTrace();
@@ -82,7 +80,6 @@ public class AWSServerData extends ServerData {
             client.putObject("egostats", file.getName(), file);
         } catch (AmazonServiceException e) {
             System.err.println(e.getErrorMessage());
-            System.exit(1);
         }
     }
 }

@@ -35,37 +35,42 @@ public class GTParser implements ServerParser<String> {
         String name = content.substring(nameStart, nameEnd);
 
         int rankStart = content.indexOf("Game Server Rank: ") + "Game Server Rank: ".length();
-        // int rankEnd = content.indexOf("th", rankStart);
         int rankEnd = getIndex(content, rankStart);
         int rank = Integer.parseInt(content.substring(rankStart, rankEnd));
 
-        // int percStart = content.indexOf("th", rankEnd) + 4;
-        int percStart = getIndex(content, rankEnd, 4);
-        int percEnd = content.indexOf("th Percentile)", percStart);
-        if (percEnd == -1)
-            percEnd = content.indexOf("nd Percentile)", percStart);
-        if (percEnd == -1)
-            percEnd = content.indexOf("st Percentile)", percStart);
+        int percStart = getIndex(content, rankEnd) + 4;
+        int percEnd = getIndex(content, " Percentile)", percStart);
         int percentile = Integer.parseInt(content.substring(percStart, percEnd));
+
+        int monthHighestStart = content.indexOf("Highest (past month): ") + "Highest (past month): ".length();
+        int monthHighestEnd = getIndex(content, monthHighestStart);
+        int monthHighest = Integer.parseInt(content.substring(monthHighestStart, monthHighestEnd));
+
+        int monthLowestStart = content.indexOf("past month): ", monthHighestEnd) + "past month): ".length();
+        int monthLowestEnd = getIndex(content, monthLowestStart);
+        int monthLowest = Integer.parseInt(content.substring(monthLowestStart, monthLowestEnd));
 
         snapshot.setName(name);
         snapshot.setRank(rank);
         snapshot.setPercentile(percentile);
+        snapshot.setMonthlyHigh(monthHighest);
+        snapshot.setMonthlyLow(monthLowest);
         return snapshot;
     }
 
-    private int getIndex(String content, int start, int offset) {
+    private int getIndex(String content, String suffix, int start) {
         List<Integer> inds = new ArrayList<>();
-        inds.add(content.indexOf("th", start));
-        inds.add(content.indexOf("nd", start));
-        inds.add(content.indexOf("st", start));
+        inds.add(content.indexOf("nd" + suffix, start));
+        inds.add(content.indexOf("rd" + suffix, start));
+        inds.add(content.indexOf("st" + suffix, start));
+        inds.add(content.indexOf("th" + suffix, start));
         inds.removeIf(i -> i == -1);
         inds.sort(Integer::compareTo);
-        return inds.get(0) + offset;
+        return inds.get(0);
     }
 
     private int getIndex(String content, int start) {
-        return getIndex(content, start, 0);
+        return getIndex(content, "", start);
     }
 
     public DataSnapshot parseData(ServerConfig config) {
@@ -79,8 +84,7 @@ public class GTParser implements ServerParser<String> {
             }
         } catch (IOException e) {
             e.printStackTrace();
-            System.out.println(
-                    "Failed to fetch data from \"https://www.gametracker.com/server_info/" + config.getIp() + "\"");
+            System.out.println("Failed to fetch data from " + baseUrl + config.getIp());
         }
         return null;
     }

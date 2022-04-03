@@ -13,10 +13,10 @@ import lombok.Setter;
 public class DataSnapshot {
     @Getter
     @Setter
-    protected int rank, monthlyRank, percentile, monthlyPercentile;
+    protected int rank, monthlyHigh, monthlyLow, percentile; // -1 if not available
     @Getter
     @Setter
-    protected String name;
+    protected String name; // May be null
     @Getter
     @Setter
     protected long date;
@@ -27,10 +27,10 @@ public class DataSnapshot {
 
     public DataSnapshot(long date) {
         this();
-        rank = 0;
-        monthlyRank = 0;
-        percentile = 0;
-        monthlyPercentile = 0;
+        rank = -1;
+        monthlyHigh = -1;
+        monthlyLow = -1;
+        percentile = -1;
         this.date = date;
     }
 
@@ -41,23 +41,41 @@ public class DataSnapshot {
 
     public DataSnapshot(String data) {
         JsonObject element = JsonParser.parseString(data).getAsJsonObject();
-        this.rank = element.get("rank").getAsInt();
-        // this.monthlyRank = element.get("monthlyRank").getAsInt();
-        // this.percentile = element.get("percentile").getAsInt();
-        // this.monthlyPercentile = element.get("monthlyPercentile").getAsInt();
-        // this.name = element.get("name").getAsString();
-        this.date = element.get("date").getAsLong();
+        this.rank = element.get("rank").getAsInt(); // If this doesn't work then UH OH
+        this.date = element.get("date").getAsLong(); // If this doesn't work then UH OH
+        this.monthlyHigh = getDefault(element, "monthlyHigh", -1);
+        this.monthlyHigh = getDefault(element, "monthlyLow", -1);
+        this.percentile = getDefault(element, "percentile", -1);
+        // this.name = getDefault(element, "name", null);
     }
 
     public JsonObject toJSON() {
         JsonObject obj = new JsonObject();
         obj.addProperty("rank", rank);
-        // obj.addProperty("monthlyRank", monthlyRank);
-        // obj.addProperty("percentile", percentile);
-        // obj.addProperty("monthlyPercentile", monthlyPercentile);
+        obj.addProperty("monthlyHigh", monthlyHigh);
+        obj.addProperty("monthlyLow", monthlyLow);
+        obj.addProperty("percentile", percentile);
         // obj.addProperty("name", name);
         obj.addProperty("date", date);
         return obj;
+    }
+
+    public int getDefault(JsonObject obj, String key, int def) {
+        if (obj.get(key) == null || obj.get(key).isJsonNull())
+            return def;
+        return obj.get(key).getAsInt();
+    }
+
+    public long getDefault(JsonObject obj, String key, long def) {
+        if (obj.get(key) == null || obj.get(key).isJsonNull())
+            return def;
+        return obj.get(key).getAsLong();
+    }
+
+    public String getDefault(JsonObject obj, String key, String def) {
+        if (obj.get(key) == null || obj.get(key).isJsonNull())
+            return def;
+        return obj.get(key).getAsString();
     }
 
 }
