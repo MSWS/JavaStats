@@ -35,12 +35,20 @@ public abstract class ServerData implements Comparable<ServerData> {
         return Optional.ofNullable(lastSnap);
     }
 
-    public void addData(DataSnapshot data) {
+    /**
+     * Adds the {@link DataSnapshot} to the list of snapshots
+     * 
+     * @param data The {@link DataSnapshot} to add
+     * @return True if the snapshot was successfully added, false if it was not (ie
+     *         caching)
+     */
+    public boolean addData(DataSnapshot data) {
         if (getDataAt(System.currentTimeMillis()).isPresent()
                 && System.currentTimeMillis() - getDataAt(System.currentTimeMillis()).get().getDate() < TimeUnit.HOURS
                         .toMillis(12))
-            return;
+            return false;
         snapshots.put(data.getDate(), data);
+        return true;
     }
 
     @Override

@@ -124,8 +124,8 @@ public class JavaStats extends TimerTask {
 
     public void fetch() {
         for (ServerData dat : servers.values()) {
-            dat.addData(parser.parseData(dat.getConfig()));
-            dat.save();
+            if (dat.addData(parser.parseData(dat.getConfig())))
+                dat.save();
         }
         lastFetch = System.currentTimeMillis();
     }
