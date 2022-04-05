@@ -7,6 +7,7 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 import java.util.StringJoiner;
+import java.util.TimeZone;
 
 import xyz.msws.server.DataSnapshot;
 import xyz.msws.server.ServerData;
@@ -18,6 +19,10 @@ import xyz.msws.server.ServerData;
 public class ForumsFormat implements Formatter {
 
     private static SimpleDateFormat sdf = new SimpleDateFormat("MM/dd/yyyy");
+
+    static {
+        sdf.setTimeZone(TimeZone.getTimeZone("PST"));
+    }
 
     @Override
     public String format(Collection<ServerData> servers, long time) {

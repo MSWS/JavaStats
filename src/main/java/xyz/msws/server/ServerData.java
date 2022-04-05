@@ -45,7 +45,7 @@ public abstract class ServerData implements Comparable<ServerData> {
     public boolean addData(DataSnapshot data) {
         if (getDataAt(System.currentTimeMillis()).isPresent()
                 && System.currentTimeMillis() - getDataAt(System.currentTimeMillis()).get().getDate() < TimeUnit.HOURS
-                        .toMillis(12))
+                        .toMillis(8))
             return false;
         snapshots.put(data.getDate(), data);
         return true;

@@ -67,12 +67,10 @@ public class AWSServerData extends ServerData {
 
     @Override
     public void save() {
-        System.out.println("Saving to S3:");
         try (FileWriter writer = new FileWriter(file)) {
             for (Map.Entry<Long, DataSnapshot> entry : snapshots.entrySet()) {
                 writer.write(entry.getKey() + ":" + entry.getValue().toJSON());
                 writer.write(System.lineSeparator());
-                System.out.println(entry.getKey() + ":" + entry.getValue().toJSON());
             }
         } catch (IOException e) {
             e.printStackTrace();
