@@ -68,7 +68,7 @@ public class ForumsFormat implements Formatter {
     private String generate(int nRank, int old, boolean ytd) {
         if (ytd)
             return "[COLOR=" + getColor(old, nRank) + "][B](" + (nRank > old ? "-" : "") + Math.abs(nRank - old)
-                    + ") [" + old + "][/B][/COLOR]";
+                    + ")[/B][/COLOR]";
         return "#" + nRank + " " + generate(nRank, old, true);
     }
 
