@@ -2,13 +2,12 @@ package xyz.msws.server;
 
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
-
 import lombok.Getter;
 import lombok.Setter;
 
 /**
  * @author MSWS
- *         Represents a snapshot of the server's data.
+ * Represents a snapshot of the server's data.
  */
 public class DataSnapshot {
     @Getter

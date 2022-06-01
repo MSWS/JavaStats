@@ -1,15 +1,14 @@
 package xyz.msws.parser;
 
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
-
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
-
 import xyz.msws.server.DataSnapshot;
 import xyz.msws.server.ServerConfig;
 import xyz.msws.server.StatConfig;
+
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * GameTracker implementation of {@link ServerParser}.

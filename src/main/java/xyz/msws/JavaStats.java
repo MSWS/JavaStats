@@ -1,27 +1,14 @@
 package xyz.msws;
 
-import java.text.DateFormat;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.Calendar;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.TimeZone;
-import java.util.Timer;
-import java.util.TimerTask;
-import java.util.concurrent.TimeUnit;
-
 import com.amazonaws.auth.DefaultAWSCredentialsProviderChain;
 import com.amazonaws.regions.Regions;
 import com.amazonaws.services.s3.AmazonS3;
 import com.amazonaws.services.s3.AmazonS3ClientBuilder;
-
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RestController;
-
 import xyz.msws.formatter.Formatter;
 import xyz.msws.formatter.ForumsFormat;
 import xyz.msws.parser.GTParser;
@@ -29,6 +16,12 @@ import xyz.msws.server.AWSServerData;
 import xyz.msws.server.ServerConfig;
 import xyz.msws.server.ServerData;
 import xyz.msws.server.StatConfig;
+
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.*;
+import java.util.concurrent.TimeUnit;
 
 @SpringBootApplication
 @RestController
@@ -90,7 +83,7 @@ public class JavaStats extends TimerTask {
         return data;
     }
 
-    @GetMapping(value = { "/lastFetch", "/lf" })
+    @GetMapping(value = {"/lastFetch", "/lf"})
     public String getLastFetch() {
         return String.format("%d | %d (%d)", System.currentTimeMillis(), lastFetch,
                 System.currentTimeMillis() - lastFetch);
