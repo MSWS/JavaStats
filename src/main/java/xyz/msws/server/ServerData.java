@@ -1,9 +1,13 @@
 package xyz.msws.server;
 
+import static org.junit.Assert.assertEquals;
+
 import java.util.Map;
 import java.util.Optional;
 import java.util.TreeMap;
 import java.util.concurrent.TimeUnit;
+
+import org.junit.Test;
 
 import lombok.Getter;
 
@@ -61,4 +65,39 @@ public abstract class ServerData implements Comparable<ServerData> {
     }
 
     public abstract void save();
+
+    public ServerData generateTestServer() {
+        return new ServerData(config) {
+            @Override
+            public void save() {
+                throw new UnsupportedOperationException("testData expected to save");
+            }
+        };
+    }
+
+    @Test
+    public void testExact() {
+        ServerData data = generateTestServer();
+        data.addData(new DataSnapshot(2000));
+        data.addData(new DataSnapshot(5000));
+        data.addData(new DataSnapshot(6000));
+
+        assertEquals("Failed to fetch exact date", data.getDataAt(5000).get().getDate(), 5000);
+    }
+
+    @Test
+    public void testSingularPrevious() {
+        ServerData data = generateTestServer();
+        data.addData(new DataSnapshot(2000));
+
+        assertEquals("Failed to fetch date previous", data.getDataAt(1000).get().getDate(), 1000);
+    }
+
+    @Test
+    public void testSingularAfter() {
+        ServerData data = generateTestServer();
+        data.addData(new DataSnapshot(2000));
+
+        assertEquals("Failed to fetch date after", data.getDataAt(3000).get().getDate(), 3000);
+    }
 }

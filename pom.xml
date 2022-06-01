@@ -19,8 +19,7 @@
     <dependency>
       <groupId>junit</groupId>
       <artifactId>junit</artifactId>
-      <version>4.11</version>
-      <scope>test</scope>
+      <version>4.13.2</version>
     </dependency>
     <dependency>
       <groupId>org.jsoup</groupId>
@@ -112,5 +111,4 @@
       </plugin>
     </plugins>
   </build>
-
 </project>
