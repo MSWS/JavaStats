@@ -21,6 +21,7 @@
             <groupId>junit</groupId>
             <artifactId>junit</artifactId>
             <version>4.13.2</version>
+            <scope>test</scope>
         </dependency>
         <dependency>
             <groupId>org.jsoup</groupId>
@@ -54,7 +55,6 @@
             <artifactId>aws-java-sdk-bom</artifactId>
             <version>1.11.1000</version>
             <type>pom</type>
-            <scope>import</scope>
         </dependency>
         <dependency>
             <groupId>com.amazonaws</groupId>
@@ -94,10 +94,7 @@
             <plugin>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
-            </plugin>
-            <plugin>
-                <groupId>org.springframework.boot</groupId>
-                <artifactId>spring-boot-maven-plugin</artifactId>
+                <version>2.6.6</version>
                 <configuration>
                     <fork>true</fork>
                     <mainClass>xyz.msws.JavaStats</mainClass>
