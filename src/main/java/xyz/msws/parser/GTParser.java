@@ -41,13 +41,19 @@ public class GTParser implements ServerParser<String> {
         int percEnd = getIndex(content, " Percentile)", percStart);
         int percentile = Integer.parseInt(content.substring(percStart, percEnd));
 
-        int monthHighestStart = content.indexOf("Highest (past month): ") + "Highest (past month): ".length();
-        int monthHighestEnd = getIndex(content, monthHighestStart);
-        int monthHighest = Integer.parseInt(content.substring(monthHighestStart, monthHighestEnd));
+        int monthHighest = 0, monthLowest = 0;
+        try {
+            int monthHighestStart = content.indexOf("Highest (past month): ") + "Highest (past month): ".length();
+            int monthHighestEnd = getIndex(content, monthHighestStart);
+            monthHighest = Integer.parseInt(content.substring(monthHighestStart, monthHighestEnd));
 
-        int monthLowestStart = content.indexOf("past month): ", monthHighestEnd) + "past month): ".length();
-        int monthLowestEnd = getIndex(content, monthLowestStart);
-        int monthLowest = Integer.parseInt(content.substring(monthLowestStart, monthLowestEnd));
+            int monthLowestStart = content.indexOf("past month): ", monthHighestEnd) + "past month): ".length();
+            int monthLowestEnd = getIndex(content, monthLowestStart);
+            monthLowest = Integer.parseInt(content.substring(monthLowestStart, monthLowestEnd));
+        } catch (NumberFormatException e) {
+            System.out.println("Error occurred when fetching monthly statistics");
+            e.printStackTrace();
+        }
 
         snapshot.setName(name);
         snapshot.setRank(rank);
@@ -64,7 +70,11 @@ public class GTParser implements ServerParser<String> {
         inds.add(content.indexOf("st" + suffix, start));
         inds.add(content.indexOf("th" + suffix, start));
         inds.removeIf(i -> i == -1);
-        inds.sort(Integer::compareTo);
+        try {
+            inds.sort(Integer::compareTo);
+        } catch (NumberFormatException e) {
+            return -1;
+        }
         return inds.get(0);
     }
 
