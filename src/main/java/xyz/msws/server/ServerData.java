@@ -1,11 +1,12 @@
 package xyz.msws.server;
 
+import lombok.Getter;
+import xyz.msws.data.DataSnapshot;
+
 import java.util.Map;
 import java.util.Optional;
 import java.util.TreeMap;
 import java.util.concurrent.TimeUnit;
-
-import lombok.Getter;
 
 public abstract class ServerData implements Comparable<ServerData> {
     protected Map<Long, DataSnapshot> snapshots = new TreeMap<>();
