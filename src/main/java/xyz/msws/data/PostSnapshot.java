@@ -16,4 +16,13 @@ public class PostSnapshot {
 
     @Getter
     private int id;
+
+    @Getter
+    private int userId;
+
+    @Getter
+    private long publishDate;
+
+    @Getter
+    private long editDate;
 }
