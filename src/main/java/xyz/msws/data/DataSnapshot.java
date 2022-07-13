@@ -1,4 +1,4 @@
-package xyz.msws.server;
+package xyz.msws.data;
 
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
