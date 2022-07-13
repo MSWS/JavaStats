@@ -1,5 +1,7 @@
 package xyz.msws.server;
 
+import xyz.msws.data.DataSnapshot;
+
 import java.io.*;
 import java.util.Map;
 

@@ -1,6 +1,6 @@
 package xyz.msws.formatter;
 
-import xyz.msws.server.DataSnapshot;
+import xyz.msws.data.DataSnapshot;
 import xyz.msws.server.ServerData;
 
 import java.text.SimpleDateFormat;
@@ -12,7 +12,7 @@ import java.util.*;
  */
 public class ForumsFormat implements Formatter {
 
-    private static SimpleDateFormat sdf = new SimpleDateFormat("MM/dd/yyyy");
+    public static SimpleDateFormat sdf = new SimpleDateFormat("MM/dd/yyyy");
 
     static {
         sdf.setTimeZone(TimeZone.getTimeZone("PST"));

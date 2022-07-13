@@ -2,6 +2,7 @@ package xyz.msws.server;
 
 import org.junit.Before;
 import org.junit.Test;
+import xyz.msws.data.DataSnapshot;
 
 import static org.junit.Assert.*;
 

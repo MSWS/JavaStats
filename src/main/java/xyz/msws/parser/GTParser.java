@@ -2,7 +2,7 @@ package xyz.msws.parser;
 
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
-import xyz.msws.server.DataSnapshot;
+import xyz.msws.data.DataSnapshot;
 import xyz.msws.server.ServerConfig;
 import xyz.msws.server.StatConfig;
 

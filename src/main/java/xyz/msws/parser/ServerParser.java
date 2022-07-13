@@ -1,6 +1,6 @@
 package xyz.msws.parser;
 
-import xyz.msws.server.DataSnapshot;
+import xyz.msws.data.DataSnapshot;
 
 /**
  * Responsible for parsing specific types of data into {@link DataSnapshot}s.

@@ -1,6 +1,7 @@
 package xyz.msws.server;
 
 import lombok.Getter;
+import xyz.msws.data.DataSnapshot;
 
 import java.util.Map;
 import java.util.Optional;
