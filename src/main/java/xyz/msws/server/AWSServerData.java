@@ -1,19 +1,14 @@
 package xyz.msws.server;
 
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.FileReader;
-import java.io.FileWriter;
-import java.io.IOException;
-import java.util.Map;
-
 import com.amazonaws.AmazonServiceException;
 import com.amazonaws.services.s3.AmazonS3;
 import com.amazonaws.services.s3.model.AmazonS3Exception;
 import com.amazonaws.services.s3.model.S3Object;
 import com.amazonaws.services.s3.model.S3ObjectInputStream;
 import xyz.msws.data.DataSnapshot;
+
+import java.io.*;
+import java.util.Map;
 
 /**
  * AWS Implementation of {@link ServerData}

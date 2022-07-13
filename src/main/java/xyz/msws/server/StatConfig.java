@@ -1,9 +1,9 @@
 package xyz.msws.server;
 
+import lombok.Getter;
+
 import java.util.ArrayList;
 import java.util.List;
-
-import lombok.Getter;
 
 /**
  * Represents the base URL and list of {@link ServerConfig}s

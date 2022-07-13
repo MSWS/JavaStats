@@ -8,7 +8,6 @@ import java.io.IOException;
 import xyz.msws.data.DataSnapshot;
 
 import java.io.*;
-import java.util.Map;
 
 public class FileServerData extends ServerData {
     private File file;

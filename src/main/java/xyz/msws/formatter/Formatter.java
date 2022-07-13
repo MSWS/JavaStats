@@ -1,8 +1,8 @@
 package xyz.msws.formatter;
 
-import java.util.Collection;
-
 import xyz.msws.server.ServerData;
+
+import java.util.Collection;
 
 /**
  * Responsible for formatting server data

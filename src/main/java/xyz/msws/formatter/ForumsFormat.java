@@ -1,16 +1,10 @@
 package xyz.msws.formatter;
 
-import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.List;
-import java.util.StringJoiner;
-import java.util.TimeZone;
-
 import xyz.msws.data.DataSnapshot;
 import xyz.msws.server.ServerData;
+
+import java.text.SimpleDateFormat;
+import java.util.*;
 
 /**
  * Forum implementation of a {@link Formatter}
