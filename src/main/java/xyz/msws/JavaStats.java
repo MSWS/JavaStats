@@ -43,7 +43,7 @@ public class JavaStats extends TimerTask {
     private long lastRun = 0, lastFetch = 0;
     private String data = null, raw = null;
     public static int RANKING_ID = 221595, USER_ID = 102210;
-    private final String token = System.getenv("XF-Api-Key");
+    private final String token = System.getenv("XF_Api_Key");
 
     public static void main(String[] args) {
         SpringApplication.run(JavaStats.class, args);
@@ -65,7 +65,7 @@ public class JavaStats extends TimerTask {
         statConfig.add("jb.csgo.edgegamers.cc:27015", "Jailbreak");
         statConfig.add("ttt.csgo.edgegamers.cc:27015", "Trouble in Terrorist Town");
         statConfig.add("surf.csgo.edgegamers.cc:27015", "Surf");
-        statConfig.add("surf-static.csgo.edgegamers.cc:27015", "Surf Summer");
+//        statConfig.add("surf-static.csgo.edgegamers.cc:27015", "Surf Summer");
         statConfig.add("bhop.csgo.edgegamers.cc:27015", "Bhop");
         statConfig.add("104.128.58.205:27015", "AWP Only");
         statConfig.add("104.128.58.204:27015", "KZ Climb");

@@ -31,6 +31,9 @@ public class GTParser implements ServerParser<String> {
 
         int nameStart = "Server Summary Name: ".length();
         int nameEnd = content.indexOf(" Game:", nameStart);
+        if (nameEnd == -1) {
+            System.out.println("Error occured when fetching monthly stats of " + this.baseUrl);
+        }
         String name = content.substring(nameStart, nameEnd);
 
         int rankStart = content.indexOf("Game Server Rank: ") + "Game Server Rank: ".length();
@@ -89,6 +92,7 @@ public class GTParser implements ServerParser<String> {
                 return parseData(doc.toString());
             } catch (IndexOutOfBoundsException e) {
                 System.out.println("Failed to parse " + doc.toString());
+                System.out.println("Config: " + config.getName());
                 throw e;
             }
         } catch (IOException e) {
