@@ -9,7 +9,8 @@ on:
   pull_request:
     branches: [ '**' ]
   release:
-    types: [ created ]
+    types:
+      - published
 
 jobs:
   build:
@@ -24,8 +25,25 @@ jobs:
           cache: maven
       - name: Build with Maven
         run: mvn package
-      - name: Publish to GitHub Packages
-        if: github.event_name == 'release'
-        run: mvn --batch-mode deploy
+      - name: Upload artifact
+        uses: actions/upload-artifact@v2
+        with:
+          name: JavaStats-${{ github.sha }}
+          path: target/*.jar
+
+
+  publish:
+    runs-on: ubuntu-latest
+    needs: build
+    if: github.event_name == 'tag'
+    steps:
+      - name: Download Artifact
+        uses: actions/download-artifact@v2
+      - uses: actions/upload-release-asset@v1.0.1
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          upload_url: ${{ github.event.release.upload_url }}
+          asset_path: ./JavaStats-${{ github.sha }}.jar
+          asset_name: JavaStats-${{ github.sha }}.jar
+          asset_content_type: application/java-archive
