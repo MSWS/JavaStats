@@ -48,11 +48,11 @@ public class ForumsFormat implements Formatter {
                 generate(dataNow.getRank(), data.getDataAt(cal.getTimeInMillis()).get().getRank(), false)));
 
         cal.add(Calendar.DATE, 1);
-        cal.set(Calendar.DATE, 1);
+        cal.set(Calendar.DATE, 0);
         builder.add(String.format("[*]Month-to-Date: %s",
                 generate(dataNow.getRank(), data.getDataAt(cal.getTimeInMillis()).get().getRank(), true)));
 
-        cal.set(Calendar.MONTH, 1);
+        cal.set(Calendar.MONTH, 0);
         builder.add(String.format("[*]Year-to-Date: %s",
                 generate(dataNow.getRank(), data.getDataAt(cal.getTimeInMillis()).get().getRank(), true)));
         builder.add("[/LIST]");

@@ -56,7 +56,7 @@ public class XenParser implements ForumParser {
         SimpleDateFormat format = ForumsFormat.sdf;
         long time = 0;
         try {
-            date = date.substring(0, format.format(System.currentTimeMillis()).toString().length());
+            date = date.substring(0, format.format(System.currentTimeMillis()).length());
             time = format.parse(date).getTime();
         } catch (ParseException | StringIndexOutOfBoundsException e) {
             e.printStackTrace();
@@ -84,7 +84,7 @@ public class XenParser implements ForumParser {
             query.addRequestProperty("encoding", "application/x-www-form-urlencoded");
             query.addRequestProperty("User-Agent", "Java");
             if (query.getResponseCode() != HttpURLConnection.HTTP_OK) {
-                System.out.println("Error: could not fetch latest xen post from " + url.toString());
+                System.out.println("Error: could not fetch latest xen post from " + url);
                 System.out.println(query.getResponseCode() + ": " + query.getResponseMessage());
                 return null;
             }
@@ -93,7 +93,7 @@ public class XenParser implements ForumParser {
             String line;
             StringBuilder data = new StringBuilder();
             while ((line = read.readLine()) != null) data.append(line);
-            System.out.println("returning " + data.toString());
+            System.out.println("returning " + data);
             return data.toString();
         } catch (IOException e) {
             System.out.println("returning null");

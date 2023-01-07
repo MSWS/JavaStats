@@ -10,9 +10,9 @@ import java.util.List;
  */
 public class StatConfig {
     @Getter
-    private String trackerURL;
+    private final String trackerURL;
     @Getter
-    private List<ServerConfig> servers = new ArrayList<>();
+    private final List<ServerConfig> servers = new ArrayList<>();
 
     public StatConfig(String baseURL) {
         this.trackerURL = baseURL;

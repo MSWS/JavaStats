@@ -15,8 +15,8 @@ import java.util.Map;
  * Uses files for temporary storage
  */
 public class AWSServerData extends ServerData {
-    private File file;
-    private AmazonS3 client;
+    private final File file;
+    private final AmazonS3 client;
 
     public AWSServerData(AmazonS3 client, ServerConfig config) {
         super(config);

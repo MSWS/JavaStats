@@ -4,7 +4,9 @@ import lombok.Getter;
 
 public class ServerConfig {
     @Getter
-    private String ip, name;
+    private final String ip;
+    @Getter
+    private final String name;
 
     public ServerConfig(String ip, String name) {
         this.ip = ip;
