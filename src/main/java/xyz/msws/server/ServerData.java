@@ -28,10 +28,13 @@ public abstract class ServerData implements Comparable<ServerData> {
      * @return The closest snapshot to the given time or null if no snapshots exist
      */
     public Optional<DataSnapshot> getDataAt(long time) {
+        long bigDiff = Long.MAX_VALUE;
         DataSnapshot lastSnap = null;
         for (Map.Entry<Long, DataSnapshot> entry : snapshots.entrySet()) {
-            if (entry.getKey() > time)
-                return Optional.ofNullable(lastSnap == null ? snapshots.values().stream().findAny().orElse(null) : lastSnap);
+            long diff = Math.abs(entry.getKey() - time);
+            if (diff > bigDiff)
+                continue;
+            bigDiff = diff;
             lastSnap = entry.getValue();
         }
         return Optional.ofNullable(lastSnap);
@@ -56,7 +59,7 @@ public abstract class ServerData implements Comparable<ServerData> {
 
     @Override
     public int compareTo(ServerData o) {
-        if (o.getDataAt(System.currentTimeMillis()) == null && this.getDataAt(System.currentTimeMillis()) == null)
+        if (o.getDataAt(System.currentTimeMillis()).isEmpty() && this.getDataAt(System.currentTimeMillis()).isEmpty())
             return 0;
         int a = o.getDataAt(System.currentTimeMillis()).get().getRank();
         int b = this.getDataAt(System.currentTimeMillis()).get().getRank();
