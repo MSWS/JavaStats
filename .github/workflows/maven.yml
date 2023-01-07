@@ -40,9 +40,11 @@ jobs:
         uses: actions/download-artifact@v3
         with:
           name: JavaStats
+      - name: Unzip Artifact
+        run: unzip JavaStats.zip
       - uses: ncipollo/release-action@v1
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
           draft: true
           name: ${{ github.ref_name }}
-          artifacts: "*"
+          artifacts: "javastats-*.jar"
