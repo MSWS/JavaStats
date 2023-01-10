@@ -16,7 +16,7 @@ import java.util.List;
  */
 public class GTParser implements ServerParser<String> {
 
-    private String baseUrl;
+    private final String baseUrl;
 
     public GTParser(StatConfig config) {
         this.baseUrl = config.getTrackerURL();
@@ -91,7 +91,7 @@ public class GTParser implements ServerParser<String> {
             try {
                 return parseData(doc.toString());
             } catch (IndexOutOfBoundsException e) {
-                System.out.println("Failed to parse " + doc.toString());
+                System.out.println("Failed to parse " + doc);
                 System.out.println("Config: " + config.getName());
                 throw e;
             }

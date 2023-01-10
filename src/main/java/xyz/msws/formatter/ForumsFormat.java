@@ -35,7 +35,7 @@ public class ForumsFormat implements Formatter {
 
     private String format(ServerData data, long time) {
         StringJoiner builder = new StringJoiner(System.lineSeparator());
-        Calendar cal = Calendar.getInstance();
+        Calendar cal = (Calendar) Calendar.getInstance().clone();
         cal.setTimeInMillis(time);
         DataSnapshot dataNow = data.getDataAt(cal.getTimeInMillis()).get();
 
@@ -43,16 +43,15 @@ public class ForumsFormat implements Formatter {
         builder.add(String.format("[*][B]%s[/B]", data.getConfig().getName()));
         builder.add("[LIST]");
 
-        cal.add(Calendar.DATE, -1);
+        cal.add(Calendar.DAY_OF_MONTH, -1);
         builder.add(String.format("[*]Daily: %s",
                 generate(dataNow.getRank(), data.getDataAt(cal.getTimeInMillis()).get().getRank(), false)));
 
-        cal.add(Calendar.DATE, 1);
-        cal.set(Calendar.DATE, 1);
+        cal.set(Calendar.DAY_OF_MONTH, 1);
         builder.add(String.format("[*]Month-to-Date: %s",
                 generate(dataNow.getRank(), data.getDataAt(cal.getTimeInMillis()).get().getRank(), true)));
 
-        cal.set(Calendar.MONTH, 1);
+        cal.set(Calendar.DAY_OF_YEAR, 1);
         builder.add(String.format("[*]Year-to-Date: %s",
                 generate(dataNow.getRank(), data.getDataAt(cal.getTimeInMillis()).get().getRank(), true)));
         builder.add("[/LIST]");

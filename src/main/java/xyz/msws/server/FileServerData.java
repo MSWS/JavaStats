@@ -6,7 +6,7 @@ import java.io.*;
 import java.util.Map;
 
 public class FileServerData extends ServerData {
-    private File file;
+    private final File file;
 
     public FileServerData(File file, ServerConfig config) {
         super(config);
