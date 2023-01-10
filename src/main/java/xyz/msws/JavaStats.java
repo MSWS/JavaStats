@@ -71,6 +71,7 @@ public class JavaStats extends TimerTask {
         statConfig.add("104.128.58.204:27015", "KZ Climb");
         statConfig.add("d2.css.edgegamers.cc:27015", "Dust2");
         statConfig.add("104.128.58.203:27015", "Surf Advanced");
+        statConfig.add("104.128.58.207:27015", "Rotation");
 
         for (ServerConfig config : statConfig.getServers())
             servers.put(config.getName(), new AWSServerData(client, config));
